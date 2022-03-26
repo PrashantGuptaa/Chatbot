@@ -37,7 +37,7 @@ Finance chat bot is deployed on Azure Virtual Machine and accessible via Ngrok t
 
        `Username: Admin`
        `Password: 12345678`
-       `Name: Admin`
+       `Name: Admin-User`
 
 * Try sending below utterances to the bot (one by One)
 
