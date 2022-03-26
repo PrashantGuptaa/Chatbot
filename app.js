@@ -9,13 +9,14 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 const passport = require('passport');
 var config = require("./Utilities/config");
-var UserDetail = require("./Models/UserDetail");
-const passportLocalMongoose = require('passport-local-mongoose');
+const UserDetails = require("./Models/UserDetail");
 const expressSession = require('express-session')({
     secret: 'secret',
     resave: false,
     saveUninitialized: false
 });
+const LocalStrategy = require('passport-local').Strategy
+const bcrypt = require('bcrypt')
 
 app.use(expressSession);
 app.use(passport.initialize());
@@ -39,11 +40,31 @@ mongoose.connect(config.mongoDB_connection_string, {
 });
 
 //Authentication using passport
-UserDetail.plugin(passportLocalMongoose);
-const UserDetails = mongoose.model('userInfo', UserDetail, 'userInfo');
-passport.use(UserDetails.createStrategy());
-passport.serializeUser(UserDetails.serializeUser());
-passport.deserializeUser(UserDetails.deserializeUser());
+// passport.use(UserDetails.createStrategy());
+const authenticateUser = async (user, password, done) => {
+    if (user == null) {
+      return done(null, false, { message: 'No user with that username' })
+    }
+    const userData = await UserDetails.findOne({ username: user });
+    try {
+      if (await bcrypt.compare(password, userData.password)) {
+        return done(null, user)
+      } else {
+        return done(null, false, { message: 'Password incorrect' })
+      }
+    } catch (e) {
+        console.error("Error in authenticateUser", e) 
+      return done(e)
+    }
+  }
+passport.use(new LocalStrategy({ usernameField: 'username' }, authenticateUser))
+passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+  
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
 
 //Setting Ejs View Engine
 app.set('view engine', 'ejs');

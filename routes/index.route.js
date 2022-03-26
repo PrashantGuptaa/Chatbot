@@ -3,6 +3,7 @@ var api = require('./api.route');
 const bodyParser = require('body-parser');
 const connectEnsureLogin = require('connect-ensure-login');
 const passport = require('passport');
+const bcrypt = require('bcrypt')
 
 const router = express.Router();
 
@@ -34,12 +35,12 @@ router.get('/error',
  * Route to post user request to login page
  * http://localhost:<<PORT>>/login
  */
-router.post('/login', (req, res, next) => {
+router.post('/login', async (req, res, next) => {
     passport.authenticate('local',
-        (err, user, info) => {
+       async (info, user, err) => {
             if (err) {
                 return next(err);
-            }
+        }
             if (!user) {
                 return res.redirect('/error');
             }
