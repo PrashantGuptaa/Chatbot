@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../public/script.js"></script>
+        <link href="/css/main.style.css" type="text/css" rel="stylesheet">
+        <link rel="icon" href="/images/logo.ico" type="image/gif" sizes="16x16">
+    </head>
+  <body id="feedback-form">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4">
+            <div style="display: flex;justify-content: center;">
+          <h1>Feedback form</h1>
+        </div>
+          <form class="feedback-form" action="/submitFeedback" method="post">
+            <div class="form-group">
+                <label for="username">User Name</label>
+                <input  type="text" class="form-control" id="username" name="username" placeholder="User Name">
+              </div>
+            <div class="form-group">
+              <label for="heading">Heading</label>
+              <input type="text" class="form-control" id="heading" name="heading" placeholder="Heading of your feedback">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" placeholder="Enter your message, then hit the submit" id="description" name="description"></input>
+            </div>
+            <button type="submit">Submit</button>
+          </form>
+        </div><!-- primary -->
+      </div>
+    </div><!-- container -->
+  </body>
+</html> 

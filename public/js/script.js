@@ -29,11 +29,18 @@ $(function () {
     });
     // append the chat text message
     socket.on('chat_message', function (msg) {
+        const elem = a = document.getElementsByTagName('div');
+        const message = elem[elem.length - 1].innerHTML.toLowerCase();
+            if(message.includes("bye")){
+                setTimeout(() => {
+                    window.location.href = "http://localhost:5000/feedback"; 
+                }, 1000);
+            } 
         $('#messages').append($('<li>').html(msg));
         decrementPadding(count++);
     });
     // append text if someone is online
-    socket.on('is_online', function (username) {
+    socket.on('is_online', function (username) { 
         $('#messages').append($('<li>').html(username));
     });
 

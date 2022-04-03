@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const connectEnsureLogin = require('connect-ensure-login');
 const passport = require('passport');
 const bcrypt = require('bcrypt')
-
+const { registerNewUser, submitFeedback } = require('./../lib/database');
 const router = express.Router();
 
 router.use('/api', api);
@@ -21,6 +21,19 @@ router.get('/',
         res.render('index.ejs');
     });
 
+/**
+ * Route to access home or register page
+ * Access http://localhost:<<PORT>>/register
+ */
+router.get('/register',
+function (req, res) {
+    res.render('register.ejs');
+});
+
+router.get('/feedback',
+function (req, res) {
+    res.render('feedback.ejs');
+});
 
 /**
  * Route to redirect user to error page
@@ -39,7 +52,8 @@ router.post('/login', async (req, res, next) => {
     passport.authenticate('local',
        async (info, user, err) => {
             if (err) {
-                return next(err);
+                console.error("Error while Logging in", err);
+                return  res.redirect('/error');
         }
             if (!user) {
                 return res.redirect('/error');
@@ -54,6 +68,10 @@ router.post('/login', async (req, res, next) => {
 
         })(req, res, next);
 });
+
+router.post('/register',registerNewUser);
+
+router.post('/submitFeedback', submitFeedback);
 
 /**
  * Route to post user request to chat page
